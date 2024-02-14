@@ -1,0 +1,33 @@
+const axios = require('axios');
+
+async function obtenerPrecio(ticker) {
+  """
+  Obtiene el precio actual de una criptomoneda usando la API de CoinGecko.
+
+  Args:
+    ticker (str): El ticker de la criptomoneda (ej: "BTC", "ETH").
+
+  Returns:
+    float: El precio actual de la criptomoneda en USD.
+  """
+
+  const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ticker}&vs_currencies=usd`;
+  const respuesta = await axios.get(url);
+  const datos = respuesta.data;
+
+  if (respuesta.status === 200) {
+    const precio = datos[ticker].usd;
+    return precio;
+  } else {
+    console.error(`Error al obtener el precio: ${respuesta.status}`);
+    return null;
+  }
+}
+
+// Ejemplo de uso
+const ticker = prompt("Introduce el ticker de la criptomoneda: ");
+const precio = await obtenerPrecio(ticker);
+
+if (precio !== null) {
+  console.log(`El precio actual de ${ticker} es de ${precio:.2f} USD`);
+}
